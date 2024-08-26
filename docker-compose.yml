@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:15.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    ports:
+      - "${DATABASE_PORT}:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly
+    restart: always
+    ulimits:
+      memlock: -1
+    ports:
+      - "6139:6379"
+    volumes:
+      - dragonflydata:/data
+volumes:
+  dragonflydata:
+  db:
+    driver: local
